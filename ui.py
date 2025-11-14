@@ -6,6 +6,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, QSize
 import sys
+import json
 
 
 class AnnouncementCard(QWidget):
@@ -50,25 +51,11 @@ class AnnouncementCard(QWidget):
         translated_text_label.setWordWrap(True)
         translated_text_label.setObjectName("CardBodyStrong")
 
-        # Bottom row: controls
-        bottom_row = QHBoxLayout()
-        bottom_row.setSpacing(8)
-
-        play_button = QPushButton("Play Audio")
-        play_button.setObjectName("PrimaryButton")
-        replay_button = QPushButton("Re-broadcast")
-        replay_button.setObjectName("SecondaryButton")
-
-        bottom_row.addWidget(play_button)
-        bottom_row.addWidget(replay_button)
-        bottom_row.addStretch()
-
         main_layout.addLayout(title_row)
         main_layout.addWidget(original_label)
         main_layout.addWidget(original_text_label)
         main_layout.addWidget(translated_label)
         main_layout.addWidget(translated_text_label)
-        main_layout.addLayout(bottom_row)
 
 
 class FeedPage(QWidget):
@@ -175,6 +162,21 @@ class SettingsPage(QWidget):
         self.setObjectName("SettingsPage")
         self._build_ui()
 
+    def save_settings(self):
+        settings = {
+            "imap_host": self.imap_server.text(),
+            "username": self.email_address.text(),
+            "password": self.email_password.text(),
+            "email_poll_interval": self.email_interval_spin.value(),
+            "classroom_poll_interval": self.classroom_interval_spin.value(),
+            "agora_key": self.agora_key.text(),
+            "agora_endpoint" : self.agora_endpoint.text(),
+        }
+
+        with open("settings.json", "w") as f:
+            json.dump(settings, f)
+
+
     def _build_ui(self):
         root_layout = QVBoxLayout(self)
         root_layout.setContentsMargins(24, 24, 24, 24)
@@ -205,46 +207,23 @@ class SettingsPage(QWidget):
         email_form.setLabelAlignment(Qt.AlignmentFlag.AlignLeft)
         email_form.setFormAlignment(Qt.AlignmentFlag.AlignTop)
 
-        email_address = QLineEdit()
-        email_address.setPlaceholderText("your.email@college.edu")
-        email_password = QLineEdit()
-        email_password.setEchoMode(QLineEdit.EchoMode.Password)
-        email_password.setPlaceholderText("Password / App password")
-        imap_server = QLineEdit()
-        imap_server.setPlaceholderText("imap.yourcollege.edu")
+        self.email_address = QLineEdit()
+        self.email_address.setPlaceholderText("your.email@college.edu")
+        self.email_password = QLineEdit()
+        self.email_password.setEchoMode(QLineEdit.EchoMode.Password)
+        self.email_password.setPlaceholderText("Password / App password")
+        self.imap_server = QLineEdit()
+        self.imap_server.setPlaceholderText("imap.yourcollege.edu")
 
-        email_form.addRow("Primary email", email_address)
-        email_form.addRow("Password", email_password)
-        email_form.addRow("IMAP server", imap_server)
+        email_form.addRow("Primary email", self.email_address)
+        email_form.addRow("Password", self.email_password)
+        email_form.addRow("IMAP server", self.imap_server)
 
         add_email_button = QPushButton("Add another email")
         add_email_button.setObjectName("SecondaryButtonLeft")
 
         email_layout.addLayout(email_form)
         email_layout.addWidget(add_email_button)
-
-        # Classroom group
-        classroom_group = QGroupBox("Classroom Accounts")
-        classroom_group.setObjectName("SettingsGroup")
-        classroom_layout = QVBoxLayout(classroom_group)
-
-        classroom_form = QFormLayout()
-        classroom_form.setLabelAlignment(Qt.AlignmentFlag.AlignLeft)
-        classroom_form.setFormAlignment(Qt.AlignmentFlag.AlignTop)
-
-        classroom_email = QLineEdit()
-        classroom_email.setPlaceholderText("your.classroom@college.edu")
-        api_key = QLineEdit()
-        api_key.setPlaceholderText("Google API key / credentials reference")
-
-        classroom_form.addRow("Account email", classroom_email)
-        classroom_form.addRow("API credentials", api_key)
-
-        add_classroom_button = QPushButton("Add another Classroom account")
-        add_classroom_button.setObjectName("SecondaryButtonLeft")
-
-        classroom_layout.addLayout(classroom_form)
-        classroom_layout.addWidget(add_classroom_button)
 
         # Polling settings group
         polling_group = QGroupBox("Polling & Realtime Settings")
@@ -253,18 +232,18 @@ class SettingsPage(QWidget):
         polling_layout.setLabelAlignment(Qt.AlignmentFlag.AlignLeft)
         polling_layout.setFormAlignment(Qt.AlignmentFlag.AlignTop)
 
-        email_interval_spin = QSpinBox()
-        email_interval_spin.setRange(1, 60)
-        email_interval_spin.setValue(5)
-        email_interval_spin.setSuffix(" min")
+        self.email_interval_spin = QSpinBox()
+        self.email_interval_spin.setRange(1, 60)
+        self.email_interval_spin.setValue(5)
+        self.email_interval_spin.setSuffix(" min")
 
-        classroom_interval_spin = QSpinBox()
-        classroom_interval_spin.setRange(5, 300)
-        classroom_interval_spin.setValue(30)
-        classroom_interval_spin.setSuffix(" sec")
+        self.classroom_interval_spin = QSpinBox()
+        self.classroom_interval_spin.setRange(1, 60)
+        self.classroom_interval_spin.setValue(5)
+        self.classroom_interval_spin.setSuffix(" min")
 
-        polling_layout.addRow("Email polling interval", email_interval_spin)
-        polling_layout.addRow("Classroom polling interval", classroom_interval_spin)
+        polling_layout.addRow("Email polling interval", self.email_interval_spin)
+        polling_layout.addRow("Classroom polling interval", self.classroom_interval_spin)
 
         # Audio settings group
         audio_group = QGroupBox("Audio & Language Settings")
@@ -284,14 +263,14 @@ class SettingsPage(QWidget):
         agora_group.setObjectName("SettingsGroup")
         agora_layout = QFormLayout(agora_group)
 
-        agora_key = QLineEdit()
-        agora_key.setPlaceholderText("Agora API key")
+        self.agora_key = QLineEdit()
+        self.agora_key.setPlaceholderText("Agora API key")
 
-        agora_endpoint = QLineEdit()
-        agora_endpoint.setPlaceholderText("https://api.agora.io/...")
+        self.agora_endpoint = QLineEdit()
+        self.agora_endpoint.setPlaceholderText("https://api.agora.io/...")
 
-        agora_layout.addRow("API key", agora_key)
-        agora_layout.addRow("Endpoint", agora_endpoint)
+        agora_layout.addRow("API key", self.agora_key)
+        agora_layout.addRow("Endpoint", self.agora_endpoint)
 
         # Action buttons row
         actions_row = QHBoxLayout()
@@ -300,13 +279,14 @@ class SettingsPage(QWidget):
         reset_button = QPushButton("Reset to Defaults")
         reset_button.setObjectName("SecondaryButton")
 
+        save_button.clicked.connect(self.save_settings)
+
         actions_row.addStretch()
         actions_row.addWidget(reset_button)
         actions_row.addWidget(save_button)
 
         # Add groups to scroll layout
         scroll_layout.addWidget(email_group)
-        scroll_layout.addWidget(classroom_group)
         scroll_layout.addWidget(polling_group)
         scroll_layout.addWidget(audio_group)
         scroll_layout.addWidget(agora_group)

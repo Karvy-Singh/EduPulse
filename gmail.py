@@ -3,17 +3,25 @@ import email
 from email.header import decode_header
 import time
 import os
-from dotenv import load_dotenv
 
+from dotenv import load_dotenv
 load_dotenv()
 
-imap_host = "imap.gmail.com"
-username = os.getenv("username")
-password = os.getenv("password")
+import json
+
+def load_settings():
+    with open("settings.json", "r") as f:
+        return json.load(f)
+
+cfg = load_settings()
+
+imap_host = cfg["imap_host"]
+username = cfg["username"]
+password = cfg["password"]
+
+POLL_INTERVAL = cfg["email_poll_interval"]    
 
 STATE_FILE = "last_uid.txt"
-POLL_INTERVAL = 300 # seconds between checks
-
 
 def load_last_uid():
     if not os.path.exists(STATE_FILE):
