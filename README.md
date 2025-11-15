@@ -6,8 +6,6 @@
 ![GDG Hackfest 2025](https://img.shields.io/badge/GDG-Hackfest%202025-orange?style=for-the-badge)
 ![Problem Statement](https://img.shields.io/badge/Problem-LA--04-green?style=for-the-badge)
 
-**Real-time multilingual public announcement system for festivals and crisis management**
-
 [Features](#-features) • [Demo](#-demo) • [Installation](#-installation) • [Usage](#-usage) • [Architecture](#-architecture)
 
 </div>
