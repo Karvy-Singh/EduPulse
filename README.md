@@ -73,14 +73,13 @@ https://github.com/user-attachments/assets/0b3be601-721f-4fde-8e77-293ad37608e4
 
 ### Main Feed
 
-![WhatsApp Image 2025-11-14 at 21 20 19](https://github.com/user-attachments/assets/88b64103-49f7-4f19-98a6-631ab86874dc)
-*Real-time announcement feed with play audio controls*
+<img width="935" height="1136" alt="image" src="https://github.com/user-attachments/assets/19db0251-4aa5-45f0-9ea5-3cac5209794b" />
+Real-time announcement feed with play audio controls
 
 ### Settings Panel
 
-![WhatsApp Image 2025-11-15 at 09 23 45](https://github.com/user-attachments/assets/65a3a8ed-991f-40b1-a8b6-974c93790e2c)
-
-*Comprehensive settings for all integrations*
+<img width="939" height="1133" alt="image" src="https://github.com/user-attachments/assets/61da6574-0f81-410d-85f4-ef1cc92e95c9" />
+Comprehensive settings for all integrations
 
 ### Audio Playback
 - Announcements are broadcast with natural-sounding voice
